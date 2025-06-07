@@ -2,6 +2,15 @@
 // index.php — 登录/注册 + 正常首页内容
 session_start();
 
+// Open SQLite database so we can query user info when logged in
+$dbFile = __DIR__ . '/bus.db';
+try {
+    $pdo = new PDO('sqlite:' . $dbFile);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die('\u6570\u636e\u5e93\u8fde\u63a5\u5931\u8d25: ' . htmlspecialchars($e->getMessage()));
+}
+
 /**
  * 如果收到了登录请求，就尝试登录：
  * - 前端通过 AJAX 或者表单 POST ?act=login 提交 username/password
